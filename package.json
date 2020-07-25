@@ -1,0 +1,30 @@
+{
+  "name": "dev_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HarishRMaryada/dev_test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HarishRMaryada/dev_test/issues"
+  },
+  "homepage": "https://github.com/HarishRMaryada/dev_test#readme",
+  "dependencies": {
+    "app-module-path": "^2.2.0",
+    "bcrypt": "^5.0.0",
+    "config": "^3.3.1",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.19",
+    "mongoose": "^5.9.24",
+    "swagger-ui-express": "^4.1.4"
+  },
+  "devDependencies": {}
+}

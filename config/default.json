@@ -1,0 +1,10 @@
+  
+{
+    "port": "7007",
+    "mongo":{
+        "host":"localhost",
+        "port":27017,
+        "dbName":"dms"
+    },
+    "jwtPrivateKey":"dmsJwtPrivateKey"
+}
