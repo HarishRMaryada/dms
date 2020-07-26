@@ -17,11 +17,8 @@ db.on("error", console.error.bind(console, "connection error:"));
 let gfs;
 db.once("open", function callback() {
   gfs = Grid(db.db, mongoose.mongo);
-  gfs.collection("documents");
   console.log("Mongodb connection established");
-
 });
-
 
 function initial() {
   const { init } = require("src/models/users");
@@ -29,4 +26,10 @@ function initial() {
 }
 initial();
 
-module.exports = {db,gfs}
+const gfsCollection = (collection) => {
+  console.log(collection);
+  gfs.collection(collection);
+  return gfs;
+};
+
+module.exports = { gfsCollection };

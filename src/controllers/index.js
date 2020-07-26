@@ -39,10 +39,10 @@ const controllers = (app) => {
   for (let route of allRoutes) {
     switch (route.method) {
       case "get":
-        router.get(route.path,tryCatch(route.controller));
+        router.get(route.path,auth,tryCatch(route.controller));
         break;
       case "post":
-        router.post(route.path,upload,tryCatch(route.controller));
+        router.post(route.path,auth,upload,tryCatch(route.controller));
         break;
       case "put":
         router.put(route.path,auth, tryCatch(route.controller));

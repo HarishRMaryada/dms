@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const config = require("config")
+const config = require("config");
 const baseUtils = require("../baseSchema");
 
 const user = {
@@ -31,7 +31,7 @@ UserSchema.methods.isValidPassword = async function (password) {
 };
 
 UserSchema.methods.generateAuthToken = async function () {
-  return await jwt.sign({ _id: this.email }, config.get('jwtPrivateKey'));
+  return await jwt.sign({ _id: this.email }, config.get("jwtPrivateKey"));
 };
 
 const UserModel = mongoose.model("user", UserSchema);
