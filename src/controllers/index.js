@@ -4,6 +4,8 @@ const { lstatSync, readdirSync } = require("fs");
 const { join } = require("path");
 const tryCatch = require("src/middleware/tryCatch");
 const auth = require("src/middleware/auth")
+const upload = require('src/middleware/upload');
+
 
 const isDirectory = (source) => lstatSync(source).isDirectory();
 const getDirectories = (source) =>
@@ -37,10 +39,10 @@ const controllers = (app) => {
   for (let route of allRoutes) {
     switch (route.method) {
       case "get":
-        router.get(route.path,auth, tryCatch(route.controller));
+        router.get(route.path,tryCatch(route.controller));
         break;
       case "post":
-        router.post(route.path,auth, tryCatch(route.controller));
+        router.post(route.path,upload,tryCatch(route.controller));
         break;
       case "put":
         router.put(route.path,auth, tryCatch(route.controller));

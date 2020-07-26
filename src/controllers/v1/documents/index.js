@@ -1,5 +1,10 @@
-const {  } = require("./documents");
-const documentCtrl = [
-  
+const { create } = require("./documents");
+const documentRoutes = [
+    {
+      method: "post",
+      path: "/",
+      controller: create,
+    }
 ];
-module.exports = documentCtrl;
+  
+  module.exports = documentRoutes ;

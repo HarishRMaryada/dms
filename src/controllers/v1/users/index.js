@@ -1,5 +1,5 @@
 const { login,signup } = require("./users");
-const userCtrl = [
+const userRoutes = [
   {
     method: "post",
     path: "/token",
@@ -11,4 +11,4 @@ const userCtrl = [
     controller: signup,
   },
 ];
-module.exports = userCtrl;
+module.exports = userRoutes;
