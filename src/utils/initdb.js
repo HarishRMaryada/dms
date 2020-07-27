@@ -6,17 +6,15 @@ const uri = `mongodb://${config.mongo.host}:${config.mongo.port}/${config.mongo.
 //connection
 const options = {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
   useCreateIndex: true,
+  useUnifiedTopology: true,
 };
 
 mongoose.connect(uri, options);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 
-let gfs;
 db.once("open", function callback() {
-  gfs = Grid(db.db, mongoose.mongo);
   console.log("Mongodb connection established");
 });
 
@@ -26,9 +24,10 @@ db.once("open", function callback() {
 // }
 // initial();
 
-const gfsCollection = (collection) => {
-  console.log(collection);
-  gfs.collection(collection);
+const gfsCollection = () => {
+  let gfs;
+  gfs = Grid(db.db, mongoose.mongo);
+  gfs.collection("documents");
   return gfs;
 };
 

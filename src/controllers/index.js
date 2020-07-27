@@ -3,8 +3,7 @@ const router = express.Router();
 const { lstatSync, readdirSync } = require("fs");
 const { join } = require("path");
 const tryCatch = require("src/middleware/tryCatch");
-const auth = require("src/middleware/auth")
-
+const auth = require("src/middleware/auth");
 
 const isDirectory = (source) => lstatSync(source).isDirectory();
 const getDirectories = (source) =>
@@ -38,16 +37,16 @@ const controllers = (app) => {
   for (let route of allRoutes) {
     switch (route.method) {
       case "get":
-        router.get(route.path,auth,tryCatch(route.controller));
+        router.get(route.path, auth, tryCatch(route.controller));
         break;
       case "post":
-        router.post(route.path,auth,tryCatch(route.controller));
+        router.post(route.path, auth, tryCatch(route.controller));
         break;
       case "put":
-        router.put(route.path,auth, tryCatch(route.controller));
+        router.put(route.path, auth, tryCatch(route.controller));
         break;
       case "patch":
-        router.patch(route.path,auth, tryCatch(route.controller));
+        router.patch(route.path, auth, tryCatch(route.controller));
         break;
     }
   }

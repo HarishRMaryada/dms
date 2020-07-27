@@ -1,8 +1,10 @@
-const DocumentModel = require("./documentSchema");
+const {DocumentModel,documentFiles} = require("./documentSchema");
 const _ = require("lodash");
+const { gfsCollection } = require("src/utils/initdb");
+const { reduce } = require("lodash");
 
 const findFolder = async (id) => {
-  return await DocumentModel.findOne({_id:id});
+  return await DocumentModel.findOne({ _id: id });
 };
 
 const createFolder = async (name, user) => {
@@ -14,9 +16,27 @@ const createFolder = async (name, user) => {
   return await folder.save();
 };
 
-
-const foldersList = async (user) => {
-  return await DocumentModel.find({ user: user });
+const getAllFolders = async (user) => {
+  return await DocumentModel.find({ user: user }).populate("files");
 };
 
-module.exports = { createFolder, foldersList, findFolder };
+const getAllFiles = async (user) => {
+  let data = await DocumentModel.find({user:user}).select("files -_id")
+  data = data.reduce((acc,cv)=>{
+    return acc.concat(cv.files)
+  },[])
+  data = await documentFiles.find({user:user,_id:{$nin:[data]}})
+  return data
+};
+
+const getFilesInFolder = async (folderId, userId) => {
+  return await DocumentModel.findOne({ _id: folderId, user: userId }).populate("files")
+};
+
+module.exports = {
+  createFolder,
+  getAllFolders,
+  getAllFiles,
+  findFolder,
+  getFilesInFolder,
+};

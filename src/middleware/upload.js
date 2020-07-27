@@ -12,7 +12,8 @@ const storage = new GridFsStorage({
       const filename = file.originalname;
       const fileInfo = {
         filename: filename,
-        bucketName: `${req.user._id}-documents`,
+        bucketName: `documents`,
+        metadata: { user: req.user._id },
       };
       resolve(fileInfo);
     });

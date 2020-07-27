@@ -1,5 +1,4 @@
 const DocumentModel = require("src/models/documents");
-const { gfsCollection } = require("src/utils/initdb");
 const upload = require("src/middleware/upload");
 const multer = require("multer");
 
@@ -9,12 +8,12 @@ const createFolder = async (req, res, next) => {
     user: { _id },
   } = req;
   const folder = await DocumentModel.createFolder(name, _id);
-  res.data = { up: "uploaded", folder };
+  res.data = { folder };
   next();
 };
 
 const insertFileInFolder = async (req, res, next) => {
-  let folder = await DocumentModel.findFolder(req.params.folderId);
+  let folder = await DocumentModel.findFolder(req.params.id);
   if (!folder) {
     throw new Error("no folder exists with given id");
   }
@@ -27,14 +26,17 @@ const insertFileInFolder = async (req, res, next) => {
       next(new Error(err));
     } else if (err) {
       next(new Error(err));
-    } else if (folder.files && folder.files.length > 1) {
+    } else if (folder && folder.files && folder.files[0]) {
       next(new Error("One File already exists in this folder"));
+    } else {
+      const { file } = req;
+      let files = [];
+      files.push(file.id);
+      folder.files = files;
+      await folder.save();
+      res.data = { file };
+      next();
     }
-    const { file } = req;
-    folder.files.push(file.id);
-    await folder.save();
-    res.data = { file };
-    next();
   });
 };
 
@@ -55,27 +57,24 @@ const insertFile = async (req, res, next) => {
   });
 };
 
-const list = async (req, res, next) => {
-  let gfs = gfsCollection(`${req.user._id}-documents`);
-  gfs.files.find({}).toArray(function (err, files) {
-    if (err) console.log(err);
-    res.data = files;
-    next();
-  });
-};
-
-const foldersList = async (req, res, next) => {
-  const {
-    user: { _id },
-  } = req;
-  const folder = await DocumentModel.foldersList(_id);
-  res.data = { folder };
+const getAllFilesAndFolders = async (req, res, next) => {
+  const {user: { _id },} = req;
+  const folders = await DocumentModel.getAllFolders(_id);
+  const files = await DocumentModel.getAllFiles(_id)
+  res.data = { folders,files};
   next();
 };
+
+const getFilesInFolder = async (req, res, next) => {
+  const { user: { _id }, } = req;
+  res.data = await DocumentModel.getFilesInFolder(req.params.id, _id);
+  next();
+};
+
 module.exports = {
   createFolder,
   insertFileInFolder,
   insertFile,
-  list,
-  foldersList,
+  getAllFilesAndFolders,
+  getFilesInFolder,
 };
