@@ -1,6 +1,8 @@
 const config = require("config");
 const express = require("express");
 const methodOverride = require("method-override");
+const events = require('events');
+const eventEmitter = new events.EventEmitter();
 
 const app = express();
 
@@ -17,8 +19,21 @@ app.use(express.urlencoded({ extended: true }));
 process.on("uncaughtException", (ex) => console.log(ex));
 process.on("unhandledRejection", (e) => console.log(e));
 
-require("src/utils/initdb");
 
-require("src/controllers")(app);
+const initDB = require("src/utils/initdb");
+initDB.start(eventEmitter)
 
-module.exports = app;
+eventEmitter.once('db-connected', function () {
+  initDB.seedData(eventEmitter)
+});
+
+eventEmitter.once('seeded-data', function () {
+  start()
+});
+const start = ()=> {
+  require("src/controllers")(app);
+  app.listen(config.port, (err, res) => {
+    console.log("listening on port", config.port);
+  });
+}
+

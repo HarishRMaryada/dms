@@ -1,7 +1,5 @@
 const {DocumentModel,documentFiles} = require("./documentSchema");
 const _ = require("lodash");
-const { gfsCollection } = require("src/utils/initdb");
-const { reduce } = require("lodash");
 
 const findFolder = async (id) => {
   return await DocumentModel.findOne({ _id: id });

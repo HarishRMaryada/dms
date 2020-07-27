@@ -1,34 +1,73 @@
 const mongoose = require("mongoose");
-const Grid = require("gridfs-stream");
 const config = require("config");
+const _ = require("lodash")
 
-const uri = `mongodb://${config.mongo.host}:${config.mongo.port}/${config.mongo.dbName}`;
-//connection
-const options = {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-};
+const loadModels = () => {
+  require("src/models/users/userSchema")
+  require("src/models/documents/documentSchema")
+}
 
-mongoose.connect(uri, options);
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
+const start = (eventEmitter) => {
+  loadModels();
+  const uri = `mongodb://${config.mongo.host}:${config.mongo.port}/${config.mongo.dbName}`;
+  //connection
+  const options = {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+  };
 
-db.once("open", function callback() {
-  console.log("Mongodb connection established");
-});
+  mongoose.connect(uri, options);
+  const db = mongoose.connection;
+  db.on("error", console.error.bind(console, "connection error:"));
 
-// function initial() {
-//   const { init } = require("src/models/users");
-//   init();
-// }
-// initial();
+  db.once("open", function callback() {
+    console.log("Mongodb connection established");
+    eventEmitter.emit('db-connected');
+  });
+}
 
-const gfsCollection = () => {
-  let gfs;
-  gfs = Grid(db.db, mongoose.mongo);
-  gfs.collection("documents");
-  return gfs;
-};
+const seedData = (eventEmitter) => {
+  const models = {
+    users: require("src/models/users/userSchema"),
+    documents: require("src/models/documents/documentSchema").DocumentModel
+  }
 
-module.exports = { gfsCollection };
+
+  models.users.countDocuments({}, (err, docs) => {
+    if (err) throw new Error('db load count error')
+    if (docs === 0) {
+      const seedUser = [
+        {
+          email: "test@test.com",
+          password: "test",
+        },
+        {
+          email: "user@user.com",
+          password: "user",
+        },
+      ];
+      models.users.insertMany(seedUser, function (error, docs) {
+        if (error) {
+          console.log(error)
+          throw new Error('Create user seed user failed')
+        }
+        else {
+          let d = new models.documents({ name: "new folder" })
+          d.save((err) => {
+            if (err) {
+              console.log(err)
+              throw new Error('Create new seed folder failed')
+            } else {
+              eventEmitter.emit('seeded-data')
+            }
+          })
+        }
+      })
+    } else {
+      eventEmitter.emit('seeded-data')
+    }
+  })
+}
+
+module.exports = { start, seedData };

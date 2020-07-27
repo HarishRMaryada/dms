@@ -27,7 +27,7 @@ const insertFileInFolder = async (req, res, next) => {
     } else if (err) {
       next(new Error(err));
     } else if (folder && folder.files && folder.files[0]) {
-      next(new Error("One File already exists in this folder"));
+      next(new Error("Ristricted to upload one file per Folder"));
     } else {
       const { file } = req;
       let files = [];

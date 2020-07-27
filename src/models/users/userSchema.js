@@ -2,9 +2,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const baseUtils = require("../baseSchema");
 
-const user = {
+const user = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -14,8 +13,8 @@ const user = {
     type: String,
     required: true,
   },
-};
-const UserSchema = baseUtils.timeStamps(user);
+});
+const UserSchema = user;
 
 UserSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt(10);
