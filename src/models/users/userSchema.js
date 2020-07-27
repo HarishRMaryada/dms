@@ -31,7 +31,10 @@ UserSchema.methods.isValidPassword = async function (password) {
 };
 
 UserSchema.methods.generateAuthToken = async function () {
-  return await jwt.sign({ _id: this.email }, config.get("jwtPrivateKey"));
+  return await jwt.sign(
+    { _id: this._id, email: this.email },
+    config.get("jwtPrivateKey")
+  );
 };
 
 const UserModel = mongoose.model("user", UserSchema);

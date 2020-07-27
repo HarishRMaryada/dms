@@ -2,10 +2,15 @@ const mongoose = require("mongoose");
 const baseUtils = require("../baseSchema");
 
 const document = {
-    userId: {
-        type: String,
-        required: true,
-    },
+  name: {
+    type: String,
+    required: true,
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
+  files: [{ type: mongoose.Schema.Types.ObjectId }],
 };
 
 const DocumentSchema = baseUtils.timeStamps(document);

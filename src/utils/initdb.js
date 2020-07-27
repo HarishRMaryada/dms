@@ -20,11 +20,11 @@ db.once("open", function callback() {
   console.log("Mongodb connection established");
 });
 
-function initial() {
-  const { init } = require("src/models/users");
-  init();
-}
-initial();
+// function initial() {
+//   const { init } = require("src/models/users");
+//   init();
+// }
+// initial();
 
 const gfsCollection = (collection) => {
   console.log(collection);
