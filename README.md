@@ -61,5 +61,25 @@ jwtPrivateKey
 ## documentation url
 https://documenter.getpostman.com/view/12189737/T1Ds9bRY?version=latest
 
+## endpoints
+```
+Post - /api/v1/users/signup - creates user
+Post - /api/v1/users/token  - user login
+Post - /api/v1/documents - create folder
+Get - /api/v1/documents - get list of folders and files
+Post - /api/v1/documents/:id/files - insert file into folder with folder id
+Post - /api/v1/documents/files - insert file into root folder
+Get - /api/v1/documents/:fromId/to/:toId - move file from one folder to another folder
+
+```
+
+## test credentails/seed user
+```
+{"email" : "test@test.com", "password": "test"}
+{"email" : "user@user.com", "password": "user"}
+```
+
+
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
