@@ -58,10 +58,10 @@ const insertFile = async (req, res, next) => {
 };
 
 const getAllFilesAndFolders = async (req, res, next) => {
-  const {user: { _id },} = req;
+  const { user: { _id }, } = req;
   const folders = await DocumentModel.getAllFolders(_id);
   const files = await DocumentModel.getAllFiles(_id)
-  res.data = { folders,files};
+  res.data = { folders, files };
   next();
 };
 
@@ -71,10 +71,18 @@ const getFilesInFolder = async (req, res, next) => {
   next();
 };
 
+const modeFilesInBetweenFolders = async (req, res, next) => {
+  const { fromId, toId } = req.params
+  const { user: { _id }, } = req;
+  res.data = await DocumentModel.modeFilesInBetweenFolders(fromId, toId, _id);
+  next();
+};
+
 module.exports = {
   createFolder,
   insertFileInFolder,
   insertFile,
   getAllFilesAndFolders,
   getFilesInFolder,
+  modeFilesInBetweenFolders
 };

@@ -4,6 +4,7 @@ const {
   getAllFilesAndFolders,
   insertFile,
   getFilesInFolder,
+  modeFilesInBetweenFolders
 } = require("./documents");
 const documentRoutes = [
   //folder related operations
@@ -21,6 +22,11 @@ const documentRoutes = [
     method: "get",
     path: "/:id",
     controller: getFilesInFolder,
+  },
+  {
+    method: "get",
+    path: "/:fromId/to/:toId",
+    controller: modeFilesInBetweenFolders,
   },
   //files
   {

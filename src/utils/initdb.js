@@ -53,15 +53,7 @@ const seedData = (eventEmitter) => {
           throw new Error('Create user seed user failed')
         }
         else {
-          let d = new models.documents({ name: "new folder" })
-          d.save((err) => {
-            if (err) {
-              console.log(err)
-              throw new Error('Create new seed folder failed')
-            } else {
-              eventEmitter.emit('seeded-data')
-            }
-          })
+          eventEmitter.emit('seeded-data')
         }
       })
     } else {
